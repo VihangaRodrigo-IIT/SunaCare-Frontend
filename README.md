@@ -21,17 +21,17 @@ Key Features:
 SunaCare/
 ├── User/                          # NextJs frontend (PWA)
 │   ├── Components/                # Common Components
-|   |
-|   └── Pages/                     # Features
-|       ├── one-tap/
-|       ├── adoption/
-|       ├── donation/
-|       ├── map/
-|       ├── education/
-|       ├── community/
-|       ├── user-profile/
-|       └── auth/
-|
+│   │
+│   └── Pages/                     # Features
+│       ├── one-tap/
+│       ├── adoption/
+│       ├── donation/
+│       ├── map/
+│       ├── education/
+│       ├── community/
+│       ├── user-profile/
+│       └── auth/
+│
 ├── Backend-User/                  # NextJs frontend (PWA)
-|
-└── Backend-User/                  # NextJs frontend (PWA)
+│
+└── Admin/                  # NextJs frontend (PWA)
