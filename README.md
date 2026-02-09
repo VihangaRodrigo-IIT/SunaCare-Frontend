@@ -17,7 +17,7 @@ Key Features:
 #Educational Resources
 
 #Community
-
+```txt
 SunaCare/
 ├── User/                          # NextJs frontend (PWA)
 │   ├── Components/                # Common Components
