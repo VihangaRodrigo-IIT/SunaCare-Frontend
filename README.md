@@ -18,6 +18,7 @@ Key Features:
 
 #Community
 
+```
 SunaCare/
 ├── User/                          # NextJs frontend (PWA)
 │   ├── Components/                # Common Components
@@ -35,3 +36,4 @@ SunaCare/
 ├── Backend-User/                  # NextJs frontend (PWA)
 │
 └── Admin/                         # NextJs frontend (PWA)
+```
