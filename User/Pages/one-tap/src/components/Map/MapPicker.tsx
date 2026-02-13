@@ -2,14 +2,20 @@
 
 import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { Loader } from '@/components/Common/Loader'
 
 // Dynamically import with no SSR
 const DynamicMapContent = dynamic(
   () => import('./MapContent'),
-  { 
+  {
     ssr: false,
-    loading: () => <div className="w-full h-96 flex items-center justify-center bg-gray-100 rounded-lg"><Loader text="Loading map..." /></div>
+    loading: () => (
+      <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-gray-500">Loading map...</p>
+        </div>
+      </div>
+    )
   }
 )
 
@@ -37,6 +43,13 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     setIsClient(true)
   }, [])
 
+  // Sync when parent coordinates change (from address search)
+  useEffect(() => {
+    if (initialLat && initialLng) {
+      setMarkerCoords({ lat: initialLat, lng: initialLng })
+    }
+  }, [initialLat, initialLng])
+
   const handleLocationSelect = (address: string, lat: number, lng: number) => {
     setMarkerCoords({ lat, lng })
     onLocationSelect(address, lat, lng)
@@ -54,7 +67,10 @@ export const MapPicker: React.FC<MapPickerProps> = ({
           </p>
         </div>
         <div className="w-full h-96 bg-gray-100 rounded-lg flex items-center justify-center">
-          <Loader text="Loading map..." />
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin" />
+            <p className="text-sm text-gray-500">Loading map...</p>
+          </div>
         </div>
       </div>
     )
@@ -71,7 +87,10 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         </p>
       </div>
 
-      <div className="w-full rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border-2 border-gray-300 bg-white" style={{ height: '400px', minHeight: '400px' }}>
+      <div
+        className="w-full bg-white border-2 border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+        style={{ height: '400px', minHeight: '400px' }}
+      >
         <DynamicMapContent
           onLocationSelect={handleLocationSelect}
           initialLat={markerCoords.lat}
@@ -79,10 +98,10 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         />
       </div>
 
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 space-y-2">
+      <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-lg p-4 space-y-2">
         <div className="flex items-center gap-2">
           <span className="text-lg">📍</span>
-          <p className="font-semibold text-blue-900">Selected Coordinates</p>
+          <p className="font-semibold text-orange-900">Selected Coordinates</p>
         </div>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="bg-white bg-opacity-60 rounded p-2">
@@ -92,12 +111,6 @@ export const MapPicker: React.FC<MapPickerProps> = ({
           <div className="bg-white bg-opacity-60 rounded p-2">
             <p className="text-gray-600 text-xs font-semibold">LONGITUDE</p>
             <p className="text-gray-900 font-mono">{markerCoords.lng.toFixed(6)}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
           </div>
         </div>
       </div>
