@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet'
 import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 // Fix Leaflet default icon
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -38,9 +39,12 @@ const MapBoundsHandler = () => {
   const map = useMap()
   
   useEffect(() => {
-    // Set max bounds to Sri Lanka
-    map.setMaxBounds(SRI_LANKA_BOUNDS)
-    map.fitBounds(SRI_LANKA_BOUNDS, { padding: [50, 50] })
+    // Add small delay to ensure map is fully loaded
+    setTimeout(() => {
+      map.setMaxBounds(SRI_LANKA_BOUNDS)
+      map.fitBounds(SRI_LANKA_BOUNDS, { padding: [50, 50] })
+      map.invalidateSize()
+    }, 100)
   }, [map])
 
   return null
@@ -55,6 +59,7 @@ export default function MapContent({
     lat: initialLat || 7.8731,
     lng: initialLng || 80.7718,
   })
+  const [mapKey, setMapKey] = useState(0)
 
   // Update marker when initial coordinates change
   useEffect(() => {
@@ -96,36 +101,46 @@ export default function MapContent({
   }
 
   return (
-    <MapContainer
-      center={SRI_LANKA_CENTER}
-      zoom={10}
-      minZoom={8}
-      maxZoom={18}
-      style={{ width: '100%', height: '100%' }}
-      preferCanvas={true}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        maxNativeZoom={19}
-      />
-      <MapBoundsHandler />
-      <MapClickHandler onMapClick={handleMapClick} />
-      <Marker
-        position={[markerPos.lat, markerPos.lng]}
-        draggable={true}
-        eventHandlers={{
-          dragend: (e) => {
-            const latlng = e.target.getLatLng()
-            handleMarkerDragEnd(latlng.lat, latlng.lng)
-          },
-        }}
+    <div className="w-full h-full" key={mapKey}>
+      <MapContainer
+        key={`map-${mapKey}`}
+        center={SRI_LANKA_CENTER}
+        zoom={10}
+        minZoom={8}
+        maxZoom={18}
+        style={{ width: '100%', height: '100%' }}
+        className="leaflet-container"
+        preferCanvas={false}
       >
-        <Popup>
-          <div className="text-xs font-semibold">
-            <p>📍 Selected Location</p>
-            <p>Lat: {markerPos.lat.toFixed(4)}</p>
-            <p>Lng: {markerPos.lng.toFixed(4)}</p>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          maxNativeZoom={19}
+        />
+        <MapBoundsHandler />
+        <MapClickHandler onMapClick={handleMapClick} />
+        <Marker
+          position={[markerPos.lat, markerPos.lng]}
+          draggable={true}
+          eventHandlers={{
+            dragend: (e) => {
+              const latlng = e.target.getLatLng()
+              handleMarkerDragEnd(latlng.lat, latlng.lng)
+            },
+          }}
+        >
+          <Popup>
+            <div className="text-xs font-semibold whitespace-nowrap">
+              <p>📍 Selected Location</p>
+              <p>Lat: {markerPos.lat.toFixed(4)}</p>
+              <p>Lng: {markerPos.lng.toFixed(4)}</p>
+            </div>
+          </Popup>
+        </Marker>
+      </MapContainer>
+    </div>
+  )
+}
           </div>
         </Popup>
       </Marker>

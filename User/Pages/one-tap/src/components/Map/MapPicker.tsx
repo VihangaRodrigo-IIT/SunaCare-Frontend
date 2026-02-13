@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Loader } from '@/components/Common/Loader'
 
@@ -9,7 +9,7 @@ const DynamicMapContent = dynamic(
   () => import('./MapContent'),
   { 
     ssr: false,
-    loading: () => <Loader text="Loading map..." />
+    loading: () => <div className="w-full h-96 flex items-center justify-center bg-gray-100 rounded-lg"><Loader text="Loading map..." /></div>
   }
 )
 
@@ -43,7 +43,21 @@ export const MapPicker: React.FC<MapPickerProps> = ({
   }
 
   if (!isClient) {
-    return <Loader text="Loading map..." />
+    return (
+      <div className="space-y-3">
+        <div>
+          <label className="block text-sm font-semibold text-gray-900 mb-2">
+            Pin Location on Map
+          </label>
+          <p className="text-sm text-gray-600 mb-3">
+            Click on the map to move the marker, or drag it to your location
+          </p>
+        </div>
+        <div className="w-full h-96 bg-gray-100 rounded-lg flex items-center justify-center">
+          <Loader text="Loading map..." />
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -57,7 +71,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         </p>
       </div>
 
-      <div className="w-full bg-white border-2 border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow" style={{ height: '400px' }}>
+      <div className="w-full rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow border-2 border-gray-300 bg-white" style={{ height: '400px', minHeight: '400px' }}>
         <DynamicMapContent
           onLocationSelect={handleLocationSelect}
           initialLat={markerCoords.lat}
@@ -78,6 +92,12 @@ export const MapPicker: React.FC<MapPickerProps> = ({
           <div className="bg-white bg-opacity-60 rounded p-2">
             <p className="text-gray-600 text-xs font-semibold">LONGITUDE</p>
             <p className="text-gray-900 font-mono">{markerCoords.lng.toFixed(6)}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
           </div>
         </div>
       </div>
