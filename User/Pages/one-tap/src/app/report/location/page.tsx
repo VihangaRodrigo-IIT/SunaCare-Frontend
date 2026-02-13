@@ -119,8 +119,8 @@ export default function LocationPage() {
 
             <MapPicker
               onLocationSelect={handleLocationSelect}
-              initialLat={location?.lat || 20.5937}
-              initialLng={location?.lng || 78.9629}
+              initialLat={location?.lat || 7.8731}
+              initialLng={location?.lng || 80.7718}
             />
           </div>
         </div>

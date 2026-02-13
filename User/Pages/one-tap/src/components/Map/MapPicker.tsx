@@ -57,7 +57,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         </p>
       </div>
 
-      <div className="w-full bg-white border-2 border-gray-300 rounded-lg overflow-hidden" style={{ height: '320px' }}>
+      <div className="w-full bg-white border-2 border-gray-300 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow" style={{ height: '400px' }}>
         <DynamicMapContent
           onLocationSelect={handleLocationSelect}
           initialLat={markerCoords.lat}
@@ -65,10 +65,21 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         />
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
-        <p>
-          <strong>Selected:</strong> {markerCoords.lat.toFixed(4)}, {markerCoords.lng.toFixed(4)}
-        </p>
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 space-y-2">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">📍</span>
+          <p className="font-semibold text-blue-900">Selected Coordinates</p>
+        </div>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="bg-white bg-opacity-60 rounded p-2">
+            <p className="text-gray-600 text-xs font-semibold">LATITUDE</p>
+            <p className="text-gray-900 font-mono">{markerCoords.lat.toFixed(6)}</p>
+          </div>
+          <div className="bg-white bg-opacity-60 rounded p-2">
+            <p className="text-gray-600 text-xs font-semibold">LONGITUDE</p>
+            <p className="text-gray-900 font-mono">{markerCoords.lng.toFixed(6)}</p>
+          </div>
+        </div>
       </div>
     </div>
   )

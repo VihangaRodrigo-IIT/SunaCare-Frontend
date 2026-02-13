@@ -55,6 +55,11 @@ export const AddressSearchBar: React.FC<AddressSearchBarProps> = ({
     setSuggestions([])
   }
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value
+    handleSearchAddress(query)
+  }
+
   const handleUseCurrentLocation = async () => {
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by your browser')
@@ -99,26 +104,32 @@ export const AddressSearchBar: React.FC<AddressSearchBarProps> = ({
       </label>
       <div className="space-y-2">
         <div className="relative">
-          <input
-            type="text"
-            value={value}
-            placeholder={placeholder}
-            onChange={(e) => handleSearchAddress(e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg font-sans text-base transition-colors ${
-              error
-                ? 'border-red-300 bg-red-50'
-                : 'border-gray-300 bg-white'
-            }`}
-          />
+          <div className="relative">
+            <FiMapPin className="absolute left-3 top-3.5 text-gray-400" size={20} />
+            <input
+              type="text"
+              value={value}
+              placeholder={placeholder}
+              onChange={handleSearchChange}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg font-sans text-base transition-colors ${
+                error
+                  ? 'border-red-300 bg-red-50'
+                  : 'border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
+              }`}
+            />
+          </div>
           {suggestions.length > 0 && (
             <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-lg z-10 max-h-48 overflow-y-auto">
               {suggestions.map((suggestion, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSelectSuggestion(suggestion)}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 border-b last:border-b-0 text-sm"
+                  className="w-full text-left px-4 py-3 hover:bg-blue-50 border-b last:border-b-0 text-sm text-gray-700 hover:text-blue-900 transition-colors"
                 >
-                  {suggestion.name}
+                  <div className="flex items-start gap-2">
+                    <FiMapPin className="mt-0.5 text-gray-400 flex-shrink-0" size={16} />
+                    <span>{suggestion.name}</span>
+                  </div>
                 </button>
               ))}
             </div>

@@ -56,6 +56,13 @@ export default function MapContent({
     lng: initialLng || 80.7718,
   })
 
+  // Update marker when initial coordinates change
+  useEffect(() => {
+    if (initialLat && initialLng) {
+      setMarkerPos({ lat: initialLat, lng: initialLng })
+    }
+  }, [initialLat, initialLng])
+
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
       const response = await fetch(
